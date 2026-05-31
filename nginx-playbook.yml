@@ -1,0 +1,21 @@
+---
+- name: Automate NGINX Service Management
+  hosts: local
+  connection: local
+
+  tasks:
+    - name: Ensure NGINX is installed
+      homebrew:
+        name: nginx
+        state: present
+
+    - name: Restart NGINX service
+      shell: brew services restart nginx
+
+    - name: Validate NGINX HTTP response
+      shell: curl -I http://localhost:8080
+      register: nginx_response
+
+    - name: Display validation output
+      debug:
+        var: nginx_response.stdout_lines
